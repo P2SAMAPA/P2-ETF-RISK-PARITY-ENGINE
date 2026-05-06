@@ -1,0 +1,63 @@
+name: Daily Risk Parity Engine
+
+on:
+  schedule:
+    - cron: "0 4 * * 1-5"  # Mon–Fri at 04:00 UTC
+  workflow_dispatch:
+    inputs:
+      universe:
+        description: "Universe (EQUITY_SECTORS / COMBINED)"
+        required: false
+        default: "all"
+
+jobs:
+  run:
+    name: Risk Parity — ${{ matrix.universe }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        universe:
+          - EQUITY_SECTORS
+          - COMBINED
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install numpy (pinned)
+        run: pip install "numpy>=1.24.0,<2.0.0"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Risk Parity — ${{ matrix.universe }}
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          RP_UNIVERSE: ${{ matrix.universe }}
+        run: python trainer.py
+
+      - name: Print summary — ${{ matrix.universe }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, glob
+          files = sorted(glob.glob("hf_cache/**/*.json", recursive=True))
+          if not files:
+              print("Results pushed directly to HF")
+          else:
+              with open(files[-1]) as f:
+                  data = json.load(f)
+              s = data.get("summary", {})
+              print(f"\nUniverse: {s.get('universe')}")
+              print(f"  Ann. Return : {s.get('ann_return',0)*100:.2f}%")
+              print(f"  Ann. Vol    : {s.get('ann_vol',0)*100:.2f}%")
+              print(f"  Sortino     : {s.get('sortino',0):.2f}")
+              print(f"  Max DD      : {s.get('max_drawdown',0)*100:.1f}%")
+              print(f"  Cumulative  : {s.get('cumulative_return',0)*100:.1f}%")
+              print(f"  Rebalances  : {s.get('n_rebalances',0)}")
+          PYEOF
