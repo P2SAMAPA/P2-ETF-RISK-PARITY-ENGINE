@@ -48,7 +48,7 @@ RISK_FREE_ANNUAL = 0.0  # Annualised risk-free for Sharpe (0 = use CASH)
 
 # Return targeting: blend ERC weights with max-Sharpe tilt
 # 0.0 = pure ERC, 1.0 = pure max-Sharpe
-RETURN_TILT = 0.5
+RETURN_TILT = 0.72
 
 # ── Data ──────────────────────────────────────────────────────────────────────
 TRAIN_START = "2008-01-01"
