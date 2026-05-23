@@ -2,7 +2,7 @@ name: Daily Risk Parity Engine
 
 on:
   schedule:
-    - cron: "0 4 * * 1-5"  # Mon–Fri at 04:00 UTC
+    - cron: "0 2 * * 1-6"  # Mon–Fri at 04:00 UTC
   workflow_dispatch:
     inputs:
       universe:
