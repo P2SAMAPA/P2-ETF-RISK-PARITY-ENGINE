@@ -141,11 +141,21 @@ def run_risk_parity(
     last_rebal = -config.REBAL_FREQ  # force rebalance on first valid date
 
     for i, date in enumerate(dates):
+        # FIX: Get the returns for this date as a Series
+        rets_today = rets.loc[date]
+        
         if i < config.COV_WINDOW:
             # Not enough history — hold equal weight
-            port_ret = float(
-                sum(current_weights.get(a, 0.0) * rets.loc[date, a] for a in all_assets)
-            )
+            # FIX: Convert to float safely by using .iloc[0] if needed
+            port_ret = 0.0
+            for a in all_assets:
+                val = current_weights.get(a, 0.0)
+                if val != 0:
+                    # FIX: Ensure we get a scalar value
+                    ret_val = rets_today[a]
+                    if isinstance(ret_val, pd.Series):
+                        ret_val = ret_val.iloc[0] if len(ret_val) > 0 else 0.0
+                    port_ret += val * float(ret_val)
             port_returns.append(port_ret)
             weights_records.append({"date": date, **current_weights})
             continue
@@ -218,9 +228,15 @@ def run_risk_parity(
             )
 
         # Daily portfolio return
-        port_ret = float(
-            sum(current_weights.get(a, 0.0) * rets.loc[date, a] for a in all_assets)
-        )
+        # FIX: Convert to float safely by using .iloc[0] if needed
+        port_ret = 0.0
+        for a in all_assets:
+            val = current_weights.get(a, 0.0)
+            if val != 0:
+                ret_val = rets_today[a]
+                if isinstance(ret_val, pd.Series):
+                    ret_val = ret_val.iloc[0] if len(ret_val) > 0 else 0.0
+                port_ret += val * float(ret_val)
         port_returns.append(port_ret)
         weights_records.append(
             {"date": date, **{a: current_weights.get(a, 0.0) for a in all_assets}}
