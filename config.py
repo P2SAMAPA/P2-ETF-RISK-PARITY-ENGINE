@@ -25,7 +25,13 @@ EQUITY_SECTORS_TICKERS = [
     "XME",
     "IWF",
     "XSD",
+    "SMH",
+    "SOXX",
+    "XLB",
     "XBI",
+    "IWF",
+    "IWD",
+    "IWO",
     "IWM",
 ]
 FI_COMMODITIES_TICKERS = ["TLT", "VCIT", "LQD", "HYG", "VNQ", "GLD", "SLV"]
