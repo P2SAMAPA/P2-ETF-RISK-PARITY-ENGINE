@@ -23,11 +23,10 @@ EQUITY_SECTORS_TICKERS = [
     "XLU",
     "GDX",
     "XME",
-    "IWF",
     "XSD",
-    "SMH",
-    "SOXX",
-    "XLB",
+    "SMH",    # NEW - Added
+    "SOXX",   # NEW - Added
+    "XLB",    # NEW - Added
     "XBI",
     "IWF",
     "IWD",
