@@ -46,7 +46,7 @@ UNIVERSES = {
 COV_WINDOW = 63  # Rolling covariance window (days) — ~1 quarter
 EWM_SPAN = 63  # EWM span for expected return estimation
 REBAL_FREQ = 21  # Rebalance every N trading days (~monthly)
-MAX_ASSETS = 4  # Max ETFs (+ CASH) in output portfolio
+MAX_ASSETS = 3  # Max ETFs (+ CASH) in output portfolio
 MIN_WEIGHT = 0.01  # Minimum weight per asset (1%)
 MAX_WEIGHT = 0.40  # Maximum weight per asset (40%)
 RISK_FREE_ANNUAL = 0.0  # Annualised risk-free for Sharpe (0 = use CASH)
