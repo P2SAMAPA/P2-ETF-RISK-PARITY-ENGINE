@@ -27,6 +27,7 @@ EQUITY_SECTORS_TICKERS = [
     "SMH",    # NEW - Added
     "SOXX",   # NEW - Added
     "XLB",    # NEW - Added
+    "URA",
     "XBI",
     "IWF",
     "IWD",
